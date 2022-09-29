@@ -22,12 +22,16 @@ const Registration = ({}) => {
   };
 
   const handleChangeEmail = (event) => {
+    const emailValue = event.target.value;
     setUser({
       ...user,
       email: event.target.value,
-      username: usernameFromEmail(event.target.value),
+      username:
+        emailValue.includes('@') && !user.username
+          ? usernameFromEmail(emailValue)
+          : user.username,
     });
-    if (user.email.includes('@')) {
+    if (emailValue.includes('@')) {
       setValidation({
         ...validation,
         emailExeption: false,
@@ -111,6 +115,7 @@ const Registration = ({}) => {
         <input
           type="email"
           placeholder="Email Address"
+          onClick={handleChangeEmail}
           onChange={handleChangeEmail}
           value={validation.submitConfirmation ? '' : user.email}
         />
@@ -133,7 +138,7 @@ const Registration = ({}) => {
         />
 
         <input
-          type="text"
+          type="password"
           placeholder="Confirm password"
           onChange={handleChangePasswordConfirm}
           value={validation.submitConfirmation ? '' : user.passwordConfirm}
@@ -150,7 +155,7 @@ const Registration = ({}) => {
         </div>
 
         <div className={validation.submitConfirmation ? 'dnone' : ''}>
-          <button className="uppercase" onClick={handleSubmit}>
+          <button className="uppercase" onSubmit={handleSubmit} type="submit">
             Register
           </button>
         </div>
